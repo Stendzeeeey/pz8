@@ -1,0 +1,45 @@
+Создать два списка для тестирующей программы. В первом списке будут храниться 10 вопросов по географии, во втором – правильные ответы. 
+Написать оконное приложение, которое случайным образом выбирает из первого списка 5 вопросов (следить, чтобы они не повторялись!) и предлагает ввести ответы. 
+Затем подсчитывается количество верных ответов и выводится в окне в виде метки.
+import random
+from tkinter import *
+
+# вопросы и ответы
+questions = ["Столица Бангладеша?", "Первая страна по численности населения?", "Столица Cловении?", "Крупнейшее озеро в России?", "Самая высокая гора в мире?", "Столица Бразилии?", "Столица Ватикана?", "Какой океан находится на западе от Америки?", "Столица Норвегии?", "Какое море находится на востоке от Африки?"]
+answers = ["Дакка", "Индия", "Любляна", "Байкал", "Эверест", "Бразилиа", "Ватикан", "Тихий", "Осло", "Индийское"]
+
+class QuizApp:
+    def __init__(self, master):
+        self.master = master
+        master.title("Викторина")
+
+        self.questions = random.sample(questions, 5) # выбираем 5 ранд вопросов
+        self.answers = dict(zip(self.questions, [answers[questions.index(q)] for q in self.questions])) # связываем вопросы и ответы
+
+        # создаем метки и текстовые поля для вопросов
+        self.labels = []
+        self.entries = []
+        for i, q in enumerate(self.questions):
+            self.labels.append(Label(master, text=q))
+            self.labels[-1].grid(row=i, column=0)
+            self.entries.append(Entry(master))
+            self.entries[-1].grid(row=i, column=1)
+
+        # кнопка "Проверить"
+        self.check_button = Button(master, text="Проверить", command=self.check_answers)
+        self.check_button.grid(row=5, column=1)
+
+        # вывод результата
+        self.result_label = Label(master, text="")
+        self.result_label.grid(row=6, column=0, columnspan=2)
+
+    def check_answers(self):
+        score = 0
+        for i, q in enumerate(self.questions):
+            if self.entries[i].get().lower() == self.answers[q].lower():
+                score += 1
+        self.result_label.configure(text=f"Правильных ответов: {score} из 5")
+
+root = Tk()
+app = QuizApp(root)
+root.mainloop()
