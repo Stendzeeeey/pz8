@@ -1,0 +1,53 @@
+Создать оконное приложение для вычисления площади и периметра треугольника по трем сторонам. Стороны должны вводиться с помощью текстовых полей. 
+Для вычисления используется кнопка «Вычислить». Предусмотреть выдачу сообщений об ошибке, если треугольник не существует.
+
+import tkinter as tk
+from math import sqrt
+
+class TriangleCalculator:
+    def __init__(self, master):
+        self.master = master
+        master.title("Triangle Calculator")
+
+        self.label1 = tk.Label(master, text="Enter side 1:")
+        self.label1.grid(row=0, column=0)
+
+        self.side1_entry = tk.Entry(master)
+        self.side1_entry.grid(row=0, column=1)
+
+        self.label2 = tk.Label(master, text="Enter side 2:")
+        self.label2.grid(row=1, column=0)
+
+        self.side2_entry = tk.Entry(master)
+        self.side2_entry.grid(row=1, column=1)
+
+        self.label3 = tk.Label(master, text="Enter side 3:")
+        self.label3.grid(row=2, column=0)
+
+        self.side3_entry = tk.Entry(master)
+        self.side3_entry.grid(row=2, column=1)
+
+        self.calculate_button = tk.Button(master, text="Calculate", command=self.calculate)
+        self.calculate_button.grid(row=3, column=0)
+
+        self.result_label = tk.Label(master, text="")
+        self.result_label.grid(row=4, column=0)
+
+    def calculate(self):
+        side1 = float(self.side1_entry.get())
+        side2 = float(self.side2_entry.get())
+        side3 = float(self.side3_entry.get())
+
+        if side1 + side2 > side3 and side1 + side3 > side2 and side2 + side3 > side1:
+            # треугольник существует
+            perimeter = side1 + side2 + side3
+            s = (side1 + side2 + side3) / 2
+            area = sqrt(s * (s - side1) * (s - side2) * (s - side3))
+            self.result_label.configure(text=f"Perimeter: {perimeter:.2f} units\nArea: {area:.2f} square units")
+        else:
+            # треугольник не существует
+            self.result_label.configure(text="Error: Triangle does not exist")
+
+root = tk.Tk()
+triangle_calculator = TriangleCalculator(root)
+root.mainloop()
